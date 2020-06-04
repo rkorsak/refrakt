@@ -5,5 +5,5 @@
 }
 
 .App__Canvas {
-  width: 100%;
+  max-width: 100%;
 }
