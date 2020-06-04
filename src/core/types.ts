@@ -37,8 +37,8 @@ export type MutatorSettings = {
  * One will be used to sample the image along the x-axis, the other along the y-axis.
  */
 export type NoiseAxes = {
-  x: NoiseGenerator;
-  y: NoiseGenerator;
+  noiseX: NoiseGenerator;
+  noiseY: NoiseGenerator;
 };
 
 export type NoiseGenerator = (x: number, y: number) => number;

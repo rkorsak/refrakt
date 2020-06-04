@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeNoiseFields, imageSampler } from './core/frakt';
 import { loadImage } from './core/image';
 import presets from './core/presets';
-import { ImageData } from './core/types';
+import { ImageData, NoiseAxes, PixelGenerator } from './core/types';
 
 import Canvas from './components/Canvas';
 
@@ -17,6 +17,7 @@ const preset = presets.topoMax;
 
 function App() {
   const [image, setImage] = useState<ImageData | null>(null);
+  const [generators, setGenerators] = useState<{ axes?: NoiseAxes; art?: PixelGenerator }>({});
 
   useEffect(() => {
     var subscribed = true;
@@ -30,17 +31,23 @@ function App() {
     };
   }, []);
 
-  const noiseAxes = useMemo(() => makeNoiseFields(width, height, preset.settings, seed), []);
-  const artGenerator = useMemo(() => {
-    if (image && noiseAxes) {
-      return imageSampler(noiseAxes.noiseX, noiseAxes.noiseY, image);
+  useEffect(() => {
+    const axes = makeNoiseFields(width, height, preset.settings, seed);
+    setGenerators((prevGenerators) => ({ ...prevGenerators, axes }));
+  }, []);
+
+  useEffect(() => {
+    if (image && generators.axes) {
+      const axes = generators.axes;
+      const art = imageSampler(axes.noiseX, axes.noiseY, image);
+      setGenerators((prevGenerators) => ({ ...prevGenerators, art }));
     }
-  }, [image, noiseAxes]);
+  }, [image, generators.axes]);
 
   return (
     <div className="App">
       <h1>refrakt</h1>
-      {!!artGenerator && <Canvas className="App__Canvas" width={width} height={height} getPixel={artGenerator} />}
+      {!!generators.art && <Canvas className="App__Canvas" width={width} height={height} getPixel={generators.art} />}
     </div>
   );
 }

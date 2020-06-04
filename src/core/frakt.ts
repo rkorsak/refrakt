@@ -1,4 +1,4 @@
-import { ImageData, NoiseGenerator, PixelGenerator, NoiseSettings, Settings } from './types';
+import { ImageData, NoiseGenerator, PixelGenerator, NoiseSettings, Settings, NoiseAxes } from './types';
 import { makeNoise } from './noise';
 import { mutateNoise } from './mutators';
 import { clamp } from './utils';
@@ -32,7 +32,7 @@ const noiseMaker = (width: number, height: number, seed: number, settings: Noise
   return mutateNoise(noise, mutators);
 };
 
-export const makeNoiseFields = (width: number, height: number, settings: Settings, seed: number) => {
+export const makeNoiseFields = (width: number, height: number, settings: Settings, seed: number): NoiseAxes => {
   const noiseX = noiseMaker(width, height, seed, settings.x);
   const noiseY = noiseMaker(width, height, seed + 1, settings.y);
 
