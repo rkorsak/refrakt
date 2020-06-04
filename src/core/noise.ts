@@ -1,7 +1,6 @@
 import { makeNoise2D } from 'open-simplex-noise';
 import { makeRectangle, Options } from 'fractal-noise';
 import { NoiseGenerator } from './types';
-import { clamp } from './utils';
 
 type NoiseOptions = {
   seed: number;

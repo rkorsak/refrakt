@@ -1,5 +1,5 @@
-import { imageMultiplierX, imageMultiplierY, topographical, topographicalStep, inverse } from './mutators';
-import { NoiseSettings, Settings, SettingsPreset } from './types';
+import mutators from './mutators';
+import { NoiseSettings, Settings } from './types';
 
 /**
  * @module A collection of preset settings that produce interesting results.
@@ -56,7 +56,7 @@ const presets = {
           noise: {
             frequency: 0.004,
           },
-          mutators: [topographicalStep],
+          mutators: [mutators.topographicalStep],
         },
       }
     ),
@@ -77,7 +77,7 @@ const presets = {
             octaves: 2,
             frequency: 0.004,
           },
-          mutators: [topographicalStep],
+          mutators: [mutators.topographicalStep],
         },
         y: {
           noise: {
@@ -104,7 +104,7 @@ const presets = {
           noise: {
             octaves: 2,
           },
-          mutators: [topographical],
+          mutators: [mutators.topographical],
         },
         y: {
           noise: {
@@ -124,7 +124,7 @@ const presets = {
           frequency: 0.002,
           amplitude: 2,
         },
-        mutators: [topographical],
+        mutators: [mutators.topographical],
       },
       {
         x: {
@@ -151,20 +151,20 @@ const presets = {
           frequency: 0.002,
           amplitude: 1,
         },
-        mutators: [topographical, inverse],
+        mutators: [mutators.topographical, mutators.inverse],
       },
       {
         x: {
           noise: {
             octaves: 2,
           },
-          mutators: [imageMultiplierX],
+          mutators: [mutators.imageMultiplierX],
         },
         y: {
           noise: {
             octaves: 8,
           },
-          mutators: [imageMultiplierY],
+          mutators: [mutators.imageMultiplierY],
         },
       }
     ),

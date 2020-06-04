@@ -10,8 +10,8 @@ import Canvas from './components/Canvas';
 import './App.css';
 
 const imageUri = '/images/architecture.jpeg';
-const width = 1000;
-const height = 1000;
+const width = 1280;
+const height = 1024;
 const seed = Date.now();
 const preset = presets.topoMax;
 
