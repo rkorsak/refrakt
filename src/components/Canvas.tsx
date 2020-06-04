@@ -1,29 +1,29 @@
 import React, { useRef, useEffect } from 'react';
-import { ImageData, Coordinates, PixelValue } from '../core/types';
+import { Coordinates, PixelValue, PixelGenerator } from '../core/types';
 
 export interface CanvasProps {
   width: number;
   height: number;
   className?: string;
-  image?: ImageData;
+  getPixel?: PixelGenerator;
 }
 
 /**
  * An HTML5 canvas element which draws the provided 2D pixel array
  */
-export default function Canvas({ width, height, className, image }: CanvasProps) {
+export default function Canvas({ width, height, className, getPixel }: CanvasProps) {
   const canvasEl: React.MutableRefObject<HTMLCanvasElement | null> = useRef(null);
 
   useEffect(() => {
     if (!canvasEl.current) {
       return;
     }
-    if (image) {
-      drawCanvas(canvasEl.current, width, height, image);
+    if (getPixel) {
+      drawCanvas(canvasEl.current, width, height, getPixel);
     } else {
       clearCanvas(canvasEl.current);
     }
-  }, [width, height, image]);
+  }, [width, height, getPixel]);
 
   return <canvas className={className} ref={canvasEl} width={width} height={height} />;
 }
@@ -39,17 +39,9 @@ function clearCanvas(canvas: HTMLCanvasElement) {
 /**
  * Write the provided 2D array of pixels to an existing canvas
  */
-function drawCanvas(canvas: HTMLCanvasElement, width: number, height: number, image: ImageData) {
+function drawCanvas(canvas: HTMLCanvasElement, width: number, height: number, getPixel: PixelGenerator) {
   const ctx = canvas.getContext('2d')!;
   const outputImage = ctx.createImageData(width, height);
-
-  if (image.width !== width || image.height !== height) {
-    console.error('Pixel dimensions do not match canvas dimensions!', {
-      canvas: { width, height },
-      image: { width: image.width, height: image.height },
-    });
-    clearCanvas(canvas);
-  }
 
   const setPixel = ([x, y]: Coordinates, [r, g, b, a = 255]: PixelValue) => {
     const index = (x + y * outputImage.width) * 4;
@@ -61,7 +53,7 @@ function drawCanvas(canvas: HTMLCanvasElement, width: number, height: number, im
 
   for (var x = 0; x < width; x++) {
     for (var y = 0; y < height; y++) {
-      const pixel = image.getPixel(x, y);
+      const pixel = getPixel(x, y);
       setPixel([x, y], pixel);
     }
   }
