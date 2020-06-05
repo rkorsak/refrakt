@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { makeNoiseFields, imageSampler } from './core/frakt';
-import { loadImage } from './core/image';
+import { makeNoiseFields as makeNoiseGenerators, imageSampler } from './core/frakt';
+import { useImage } from './core/image';
 import presets from './core/presets';
-import { ImageData, NoiseAxes, PixelGenerator } from './core/types';
+import { NoiseAxes, PixelGenerator } from './core/types';
 
 import Canvas from './components/Canvas';
 
@@ -16,38 +16,30 @@ const seed = Date.now();
 const preset = presets.topoMax;
 
 function App() {
-  const [image, setImage] = useState<ImageData | null>(null);
-  const [generators, setGenerators] = useState<{ axes?: NoiseAxes; art?: PixelGenerator }>({});
+  const [noiseGenerators, setNoiseGenerators] = useState<NoiseAxes>();
+  const [artGenerator, setArtGenerator] = useState<{ generate: PixelGenerator }>();
+
+  const image = useImage(imageUri);
 
   useEffect(() => {
-    var subscribed = true;
-    loadImage(imageUri).then((image) => {
-      if (subscribed) {
-        setImage(image);
-      }
-    });
-    return () => {
-      subscribed = false;
-    };
+    const generators = makeNoiseGenerators(width, height, preset.settings, seed);
+    setNoiseGenerators(generators);
   }, []);
 
   useEffect(() => {
-    const axes = makeNoiseFields(width, height, preset.settings, seed);
-    setGenerators((prevGenerators) => ({ ...prevGenerators, axes }));
-  }, []);
-
-  useEffect(() => {
-    if (image && generators.axes) {
-      const axes = generators.axes;
-      const art = imageSampler(axes.noiseX, axes.noiseY, image);
-      setGenerators((prevGenerators) => ({ ...prevGenerators, art }));
+    if (image && noiseGenerators) {
+      const { noiseX, noiseY } = noiseGenerators;
+      const generator = imageSampler(noiseX, noiseY, image);
+      setArtGenerator({ generate: generator });
     }
-  }, [image, generators.axes]);
+  }, [image, noiseGenerators]);
 
   return (
     <div className="App">
       <h1>refrakt</h1>
-      {!!generators.art && <Canvas className="App__Canvas" width={width} height={height} getPixel={generators.art} />}
+      {!!artGenerator && (
+        <Canvas className="App__Canvas" width={width} height={height} getPixel={artGenerator.generate} />
+      )}
     </div>
   );
 }
