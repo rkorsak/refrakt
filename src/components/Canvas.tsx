@@ -4,8 +4,8 @@ import { Coordinates, PixelValue, PixelGenerator } from '../core/types';
 export interface CanvasProps {
   width: number;
   height: number;
+  getPixel: PixelGenerator | null;
   className?: string;
-  getPixel?: PixelGenerator;
 }
 
 /**
