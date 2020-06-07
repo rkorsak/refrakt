@@ -14,4 +14,18 @@ Given a two fractal noise fields (A and B) and a source image, generate a new im
 
 ---
 
+TODO:
+
+- [ ] Choose output resolution from presets
+- [ ] Choose noise generation from presets
+- [ ] Choose source image
+- [ ] Render noise fields
+- [ ] Drag and drop source image
+- [ ] Low-res previews
+- [ ] Multiple input images and outputs
+- [ ] Move noise generation to web worker
+- [ ] (Experiment) move noise generation (all art generation?) to a shader
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
