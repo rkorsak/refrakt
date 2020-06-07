@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { makeNoiseFields as makeNoiseGenerators, imageSampler } from './core/frakt';
-import { useImage } from './core/image';
+import { useImage, useNoiseGenerators, useArtGenerator } from './core/hooks';
 import presets from './core/presets';
-import { NoiseAxes, PixelGenerator } from './core/types';
-
 import Canvas from './components/Canvas';
 
 import './App.css';
@@ -13,33 +10,17 @@ const imageUri = '/images/architecture.jpeg';
 const width = 1280;
 const height = 1024;
 const seed = Date.now();
-const preset = presets.topoMax;
+const preset = presets[0];
 
 function App() {
-  const [noiseGenerators, setNoiseGenerators] = useState<NoiseAxes>();
-  const [artGenerator, setArtGenerator] = useState<{ generate: PixelGenerator }>();
-
   const image = useImage(imageUri);
-
-  useEffect(() => {
-    const generators = makeNoiseGenerators(width, height, preset.settings, seed);
-    setNoiseGenerators(generators);
-  }, []);
-
-  useEffect(() => {
-    if (image && noiseGenerators) {
-      const { noiseX, noiseY } = noiseGenerators;
-      const generator = imageSampler(noiseX, noiseY, image);
-      setArtGenerator({ generate: generator });
-    }
-  }, [image, noiseGenerators]);
+  const noiseGenerators = useNoiseGenerators(preset.settings, width, height, seed);
+  const artGenerator = useArtGenerator(noiseGenerators, image);
 
   return (
     <div className="App">
       <h1>refrakt</h1>
-      {!!artGenerator && (
-        <Canvas className="App__Canvas" width={width} height={height} getPixel={artGenerator.generate} />
-      )}
+      {!!artGenerator && <Canvas className="App__Canvas" width={width} height={height} getPixel={artGenerator} />}
     </div>
   );
 }

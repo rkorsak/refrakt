@@ -1,5 +1,4 @@
 import { ImageData, PixelValue } from './types';
-import { useState, useEffect } from 'react';
 
 export function loadImage(uri: string): Promise<ImageData> {
   return new Promise((resolve) => {
@@ -28,25 +27,4 @@ export function loadImage(uri: string): Promise<ImageData> {
 
     img.src = uri;
   });
-}
-
-/**
- * A react hook which loads the image with the given URI
- */
-export function useImage(uri: string): ImageData | null {
-  const [image, setImage] = useState<ImageData | null>(null);
-
-  useEffect(() => {
-    var subscribed = true;
-    loadImage(uri).then((image) => {
-      if (subscribed) {
-        setImage(image);
-      }
-    });
-    return () => {
-      subscribed = false;
-    };
-  }, [uri]);
-
-  return image;
 }

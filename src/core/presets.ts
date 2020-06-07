@@ -1,5 +1,5 @@
 import mutators from './mutators';
-import { NoiseSettings, Settings } from './types';
+import { NoiseSettings, Settings, SettingsPreset } from './types';
 
 /**
  * @module A collection of preset settings that produce interesting results.
@@ -26,8 +26,8 @@ export function mergeSettings(commonSettings: PartialNoiseSettings, axisSettings
   };
 }
 
-const presets = {
-  minerality: {
+const presets: SettingsPreset[] = [
+  {
     name: 'Minerality',
     description:
       'The "classic" look - somewhere between a satellite view of beaches and the cross section of a mineral deposit.',
@@ -40,7 +40,7 @@ const presets = {
     }),
   },
 
-  blobs: {
+  {
     name: 'Blobs',
     description: 'A trippy combination of smooth curves, hard edges, and noisy-but-smooth distortion',
     settings: mergeSettings(
@@ -62,7 +62,7 @@ const presets = {
     ),
   },
 
-  mineralBlobs: {
+  {
     name: 'Mineral Blobs',
     description: 'A bit of columns A and B: blobs and crunchy minerals',
     settings: mergeSettings(
@@ -89,7 +89,7 @@ const presets = {
     ),
   },
 
-  topo: {
+  {
     name: 'Topographic',
     description: 'A more overtly stylized topographical map look',
     settings: mergeSettings(
@@ -115,7 +115,7 @@ const presets = {
     ),
   },
 
-  topoMax: {
+  {
     name: 'TopoMax',
     description: 'Topographical lines on both axes, with a crunchier y',
     settings: mergeSettings(
@@ -141,7 +141,7 @@ const presets = {
     ),
   },
 
-  imageDistort: {
+  {
     name: 'Image Distortion',
     description:
       'Preserves most of the original image (stretched to fit the new dimensions), but with wavy topographical lines slicing through it.',
@@ -169,6 +169,6 @@ const presets = {
       }
     ),
   },
-};
+];
 
 export default presets;

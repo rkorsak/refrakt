@@ -32,7 +32,7 @@ const noiseMaker = (width: number, height: number, seed: number, settings: Noise
   return mutateNoise(noise, mutators);
 };
 
-export const makeNoiseFields = (width: number, height: number, settings: Settings, seed: number): NoiseAxes => {
+export const makeNoiseGenerators = (width: number, height: number, settings: Settings, seed: number): NoiseAxes => {
   const noiseX = noiseMaker(width, height, seed, settings.x);
   const noiseY = noiseMaker(width, height, seed + 1, settings.y);
 
